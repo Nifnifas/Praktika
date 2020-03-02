@@ -19,7 +19,7 @@
                                 $ds = connectToAD();
                                 $result = bindAD($ds);
                                 if($result){
-                                    $basedn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=local';
+                                    $basedn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=com';
                                     $filter = array("ou", "description");
                                     $sr = ldap_list($ds, $basedn, "ou=$name", $filter);
                                     $info = ldap_get_entries($ds, $sr);

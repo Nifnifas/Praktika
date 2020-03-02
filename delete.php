@@ -1,14 +1,15 @@
 <?php
-	//kolkas nera apsaugos, errorai resfreshinant page, nera redirect, galima trinti tik iharcodinta A aplankale esancia info
+	//kolkas nera apsaugos, errorai resfreshinant page, nera redirect
 	if (isset($_GET['id']) && is_numeric($_GET['id'])){
 		$id = $_GET['id'];
+		$name = $_GET['name']; // ifas turi buti ir su situo
 		include('connect-db.php');
 		$ds = connectToAD();
 		$result = bindAD($ds);
 		if($result){
-			$basedn = 'OU=A aplankalas,OU=Registrai,OU=TableSet,DC=mycompany,DC=local';
+			$basedn = "OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
             $filter = array("ou", "description");
-			$sr = ldap_list($ds, $basedn, "description=$id", $filter);
+			$sr = ldap_list($ds, $basedn, "ou=$id", $filter);
 			$info = ldap_get_entries($ds, $sr);
 			$entrydn = 'OU=' . $info[0]["ou"][0] . ',' . $basedn;
 			$delete = recursive_ldap_delete($ds, $entrydn, true);
@@ -24,7 +25,7 @@
 		$ds = connectToAD();
 		$result = bindAD($ds);
 		if($result){
-			$basedn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=local';
+			$basedn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=com';
             $filter = array("ou", "description");
 			$sr = ldap_list($ds, $basedn, "ou=$name", $filter);
 			$info = ldap_get_entries($ds, $sr);

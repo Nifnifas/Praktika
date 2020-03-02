@@ -23,7 +23,7 @@
                      <form action="proc-edit.php" method="post">
                          <?php 
                                 if($result){
-                                    $basedn = "OU=$id,OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=local";
+                                    $basedn = "OU=$id,OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
                                     $filter = array("ou", "description");
                                     $sr = ldap_list($ds, $basedn, "ou=*", $filter);
                                     $info = ldap_get_entries($ds, $sr);

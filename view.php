@@ -17,11 +17,11 @@
         $result = bindAD($ds);
 
         if ($result) {
-            $basedn = "OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=local";
+            $basedn = "OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
             $filter = array("ou", "description");
             $sr = ldap_list($ds, $basedn, "ou=*", $filter);
             $info = ldap_get_entries($ds, $sr);
-                /*$basedn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=local';
+                /*$basedn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=com';
                 $filter = array("ou", "description");
                 $sr = ldap_list($ds, $basedn, "ou=$name", $filter);
                 $info = ldap_get_entries($ds, $sr);
@@ -41,7 +41,7 @@
                                 <tr>
                                     <?php
                                         //tokiem dalykam reiktu sukurti atskiras funkcijas kad padavus per parametrus gauciau reza
-                                        $dn = "OU=Registrai,OU=TableSet,DC=mycompany,DC=local";
+                                        $dn = "OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
                                         $filterAll = array("ou", "description");
                                         $getList = ldap_list($ds, $dn, "ou=$name", $filterAll);
                                         $list = ldap_get_entries($ds, $getList);
@@ -62,7 +62,7 @@
                                 if($info["count"] > 0){
                                     for ($i = 0; $i < $info["count"]; $i++) {
                                         $id = $info[$i]["ou"][0];
-                                        $basedn2 = "OU=$id,OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=local";
+                                        $basedn2 = "OU=$id,OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
                                         $filter2 = array("ou", "description");
                                         $sr2 = ldap_list($ds, $basedn2, "ou=*", $filter2);
                                         $info2 = ldap_get_entries($ds, $sr2);
@@ -75,7 +75,7 @@
                                             <?php
                                             }
                                             ?>
-                                            <td><a href="edit.php?name=<?= $name ?>&id=<?= $info[$i]["ou"][0] ?>">Redaguoti</a> | <a href="delete.php?id=<?= $info[$i]["description"][0] ?>">Istrinti</a></td>
+                                            <td><a href="edit.php?name=<?= $name ?>&id=<?= $info[$i]["ou"][0] ?>">Redaguoti</a> | <a href="delete.php?name=<?= $name ?>&id=<?= $info[$i]["ou"][0] ?>">Istrinti</a></td>
                                         </tr>
     <?php
                                     }

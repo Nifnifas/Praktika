@@ -1,6 +1,6 @@
 <?php
     function connectToAD(){
-        $conn = ldap_connect("iff65.mycompany.local") or die ("Could not connect to LDAP server");
+        $conn = ldap_connect("WIN-7HITSPV9HGH.mycompany.com") or die ("Could not connect to LDAP server");
         return $conn;
     }
 
@@ -8,8 +8,8 @@
         if($conn){
             ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
             ldap_set_option($conn, LDAP_OPT_REFERRALS, 0);
-            $userCreds = 'CN=iff65,CN=Users,DC=mycompany,DC=local';
-            $psw = 'Studentai123';
+            $userCreds = 'CN=Administrator,CN=Users,DC=mycompany,DC=com';
+            $psw = 'Admin123';
             $result = ldap_bind($conn, $userCreds, $psw);
             return $result;
         }

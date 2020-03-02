@@ -12,7 +12,7 @@
             $postResults[$i] = $_POST["$i"];
         }
 
-        $basedn = "OU=$postResults[0],OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=local";
+        $basedn = "OU=$postResults[0],OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
         $filter = array("ou", "description");
         $sr = ldap_list($ds, $basedn, "ou=*", $filter);
         $info = ldap_get_entries($ds, $sr);
@@ -22,7 +22,7 @@
             //$registry["ou"] = $title;
             $registry["description"] = $_POST[$i];
             //$registry["objectClass"] = "organizationalUnit";
-            ldap_mod_replace($ds, "OU=$title,OU=$postResults[0],OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=local", $registry);
+            ldap_mod_replace($ds, "OU=$title,OU=$postResults[0],OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com", $registry);
         }
         echo "Success";
     } else {

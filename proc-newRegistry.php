@@ -10,13 +10,13 @@
             $postResults[$i] = $_POST["$i"];
         }
         $name = $_POST["name"];
-        $postResults[0] = autoIncrement($ds, "OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=local");
+        $postResults[0] = autoIncrement($ds, "OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com");
         $registry["ou"] = $postResults[0];
         $registry["description"] = count($postResults);
         $registry["objectClass"] = "organizationalUnit";
-        ldap_add($ds, "OU=$postResults[0],OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=local", $registry);
+        ldap_add($ds, "OU=$postResults[0],OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com", $registry);
 
-        $basedn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=local';
+        $basedn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=com';
         $filter = array("ou", "description");
         $sr = ldap_list($ds, $basedn, "ou=$name", $filter);
         $info = ldap_get_entries($ds, $sr);
@@ -27,7 +27,7 @@
             $registry["ou"] = $title;
             $registry["description"] = $postResults[$i];
             $registry["objectClass"] = "organizationalUnit";
-            ldap_add($ds, "OU=$title,OU=$postResults[0],OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=local", $registry);
+            ldap_add($ds, "OU=$title,OU=$postResults[0],OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com", $registry);
         }
         echo "Success";
     } else {
