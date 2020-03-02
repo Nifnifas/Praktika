@@ -112,6 +112,7 @@ echo "<a href='index.php?page=$i'>$i</a> ";
 
 echo "</td></tr>";
 echo '</table>';
+
 echo '<table id="header">';
 echo '<tr><td><a href="new.php"><img border="0" alt="Naujas irasas" src="images/new.png" width="50" height="50"></a></td><td><span style="float:center;">TEISMO PIRMININKO ĮSAKYMŲ DĖL ATOSTOGŲ, KOMANDIRUOČIŲ, MATERIALINIŲ PAŠALPŲ REGISTRAS A </span></td><td><span style="float:right;">Prisijungęs '. $vartotojas .'</span></td></tr>';
 echo "</table>";

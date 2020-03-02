@@ -1,45 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
 <html>
-
-<head>
-    <title>View.php</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-</head>
-
-<body>
-
-    <?php
+<?php
     if (isset($_GET['name'])) {
         $name = $_GET['name'];
         include('connect-db.php');
         $ds = connectToAD();
         $result = bindAD($ds);
+        ?>
+
+<head>
+    <title>REGISTRAS <?= $name ?></title>
+    <link rel="stylesheet" href="list.css">
+</head>
+
+<body bgcolor="#f2f2f2">
+    <?php
 
         if ($result) {
             $basedn = "OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
             $filter = array("ou", "description");
             $sr = ldap_list($ds, $basedn, "ou=*", $filter);
             $info = ldap_get_entries($ds, $sr);
-                /*$basedn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=com';
-                $filter = array("ou", "description");
-                $sr = ldap_list($ds, $basedn, "ou=$name", $filter);
-                $info = ldap_get_entries($ds, $sr);
-                $column = "";
-                $column = explode(";", $info[0]["description"][0]);*/
+            //pagination
+            $per_page = 4;
+            $total_results = $info["count"];
+            $total_pages = ceil($total_results / $per_page);
+            // check if the 'page' variable is set in the URL (ex: view-paginated.php?page=1)
+            if (isset($_GET['page']) && is_numeric($_GET['page'])) {
+                $show_page = $_GET['page'];
+                if ($show_page > 0 && $show_page <= $total_pages) {
+                    $start = ($show_page -1) * $per_page;
+                    $end = $start + $per_page;
+                }
+                else {
+                    $start = 0;
+                    $end = $per_page;
+                }
+            } else {
+                // if page isn't set, show first set of results
+                $start = 0;
+                $end = $per_page;
+            }
     ?>
-                <div class="container">
-                    <br />
-                    <br />
-                    <h2 align="center">*<?php echo $name; ?>* registru sarasas</h2>
-                    <a href="add.php?name=<?= $name ?>">Prideti irasa</a> | 
-                    <a href="view.php?name=<?php echo $name; ?>">Atnaujinti</a> | 
-                    <a href="all.php">Atgal</a>
-                    <div class="form-group">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <?php
+
+    <table id="header1">
+        <tr>
+            <th><span style="float:center;">Jūs dirbate su registru <?= $name ?></span>
+            <th></th>
+            <th></th>
+            </th>
+        </tr>
+        <tr>
+            <td><a href="add.php?name=<?= $name ?>">Prideti irasa</a> |
+                <a href="view.php?name=<?php echo $name; ?>">Atnaujinti</a> |
+                <a href="all.php">Atgal</a> | <a href='page.php'>Visas sąrašas</a> | <a href='search.php'>Paieška</a> |
+                <b>Puslapis:</b>
+                <?php 
+                    for ($i = 1; $i <= $total_pages; $i++) {
+                    ?>
+                        <a href="view.php?name=<?= $name ?>&page=<?= $i ?>"><?php echo $i; ?></a>
+                    <?php
+                    }
+                ?>
+            </td>
+        </tr>
+    </table>
+
+
+    <table id="sarasas">
+        <thead>
+            <tr>
+                <?php
                                         //tokiem dalykam reiktu sukurti atskiras funkcijas kad padavus per parametrus gauciau reza
                                         $dn = "OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
                                         $filterAll = array("ou", "description");
@@ -50,48 +82,54 @@
                                         $count =  count($str_arr)-1;
                                         for($i=0; $i < $count; $i++){
                                     ?>
-                                            <th scope="col"><?php echo $str_arr[$i]; ?></th>
-                                    <?php
+                <th scope="col"><?php echo $str_arr[$i]; ?></th>
+                <?php
                                         }
                                     ?>
-                                    <th scope="col">Valdymas</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
+                <th scope="col">Valdymas</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
                                 if($info["count"] > 0){
-                                    for ($i = 0; $i < $info["count"]; $i++) {
+                                    //for ($i = 0; $i < $info["count"]; $i++) {
+                                    for ($i = $start; $i < $end; $i++) {
+                                        if ($i == $total_results) { break; }
                                         $id = $info[$i]["ou"][0];
                                         $basedn2 = "OU=$id,OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
                                         $filter2 = array("ou", "description");
                                         $sr2 = ldap_list($ds, $basedn2, "ou=*", $filter2);
                                         $info2 = ldap_get_entries($ds, $sr2);
                                     ?>
-                                        <tr>
-                                            <?php
+            <tr>
+                <?php
                                             for ($j = 0; $j < $info2["count"]; $j++) {
                                             ?>
-                                                <td><?php /*echo array_search("pirmas", $info2[2]["ou"], false) */ echo $info2[$j]["description"][0]?></td>
-                                            <?php
+                <td><?php /*echo array_search("pirmas", $info2[2]["ou"], false) */ echo $info2[$j]["description"][0]?>
+                </td>
+                <?php
                                             }
                                             ?>
-                                            <td><a href="edit.php?name=<?= $name ?>&id=<?= $info[$i]["ou"][0] ?>">Redaguoti</a> | <a href="delete.php?name=<?= $name ?>&id=<?= $info[$i]["ou"][0] ?>">Istrinti</a></td>
-                                        </tr>
-    <?php
+                <td><a href="edit.php?name=<?= $name ?>&id=<?= $info[$i]["ou"][0] ?>"><img border="0" alt="edit"
+                            src="images/edit-document.jpg" width="20" height="20"></a> | <a
+                        href="delete.php?name=<?= $name ?>&id=<?= $info[$i]["ou"][0] ?>"><img border="0" alt="delete"
+                            src="images/delete-button.jpg" width="20" height="20"></a></td>
+            </tr>
+            <?php
                                     }
                                 }
                                 
                             else {
                                 ?>
-                                    <tr><td align="center" colspan="<?php echo $count+1; ?>">Registru nera!</td></tr>
-                                <?php
+            <tr>
+                <td align="center" colspan="<?php echo $count+1; ?>">Registru nera!</td>
+            </tr>
+            <?php
                             }
                             ?>
-                            </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <?php
+        </tbody>
+    </table>
+    <?php
                         } else {
                             echo "You do not have rights to view Registries.";
                         }
