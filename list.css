@@ -1,0 +1,112 @@
+#sarasas {
+    font-family: "Calibri", Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+#header1 {
+    font-family: "Calibri", Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+#header {
+    font-family: "Calibri", Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+#irasas {
+    font-family: "Calibri", Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+    border-collapse: collapse;
+}
+#irasas td:first-child{
+    font-family: "Calibri", Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+    border-collapse: collapse;
+}
+#irasas td{
+    font-family: "Calibri", Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+    border-collapse: collapse;
+	width: 50%;
+}
+#irasas tr:first-child {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4c6a92;
+    color: white;
+}
+#irasas tr {background-color: #f2f2f2;}
+#fill {width: 90%;}
+#datepicker {width: 90%;}
+#datepicker2 {width: 90%;}
+#sarasas tr:first-child th{
+    border: 1px solid #000000;
+    padding: 8px;
+}
+
+#sarasas td, #sarasas th {
+    border: 1px solid #000000;
+    padding: 8px;
+}
+#sarasas tr:nth-child{background-color: #f2f2f2;}
+
+#sarasas tr:hover {background-color: #92b6d5;}
+
+#sarasas th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4c6a92;
+    color: white;
+}
+#sarasas tr:first-child {
+   background: #f2f2f2;
+}
+#btn {
+  border: 1px solid #777777;
+  background: #4c6a92;
+  color: white;
+  font: bold 11px 'Calibri';
+  padding: 10px 30px;
+  cursor: pointer;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+}
+p.small {
+    line-height: 50%;
+}
+
+#header1 tr:first-child th{
+    border: none;
+    padding: 8px;
+}
+
+#header1 td, #header1 th {
+    border: none;
+    padding: 8px;
+}
+#header1 tr:nth-child{background-color: #f2f2f2;}
+
+#header1 th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4c6a92;
+    color: white;
+}
+#header1 tr:first-child {
+   background: #f2f2f2;
+   }
+#header th:nth-child(1), #header td:nth-child(1) {
+    width: 25%;
+	vertical-align: middle;
+	text-align: left;
+}
+#header th:nth-child(2), #header td:nth-child(2) {
+	vertical-align: middle;
+	width: 50%;
+	text-align: center;
+}
+#header th:nth-child(3), #header td:nth-child(3) {
+    width: 25%;
+	vertical-align: middle;
+	text-align: right;
+}
