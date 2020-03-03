@@ -1,51 +1,80 @@
-<html>  
-      <head>  
-           <title>Dynamically Add or Remove input fields in PHP with JQuery</title>  
-           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
-           <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
-           <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>  
-      </head>  
-      <body>  
-           <div class="container">  
-                <br />  
-                <br />  
-                <h2 align="center">Naujas irasas</h2>  
-                <div class="form-group">  
-                     <form action="proc-newRegistry.php" method="post">
-                         <?php 
-                            if (isset($_GET['name'])) {
-                                $name = $_GET['name'];
-                                include('connect-db.php');
-                                $ds = connectToAD();
-                                $result = bindAD($ds);
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<?php
+        if (isset($_GET['name'])) {
+            $name = $_GET['name'];
+            include('connect-db.php');
+            $ds = connectToAD();
+            $result = bindAD($ds);
+    ?>
+
+<head>
+    <title>REGISTRO <?= $id ?> redagavimas</title>
+    <link rel="stylesheet" href="list.css">
+</head>
+
+<body bgcolor="#f2f2f2">
+
+    <table id="header1">
+        <tr>
+            <th><span style="float:center;">Jūs kuriate registro <?= $name ?> nauja irasa</span>
+            <th></th>
+            <th></th>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <a href="view.php?name=<?= $name ?>">Atgal</a>
+            </td>
+        </tr>
+    </table>
+        <form action="proc-newRegistry.php" method="post">
+            <table id="irasas">
+                <div>
+                    <?php 
                                 if($result){
-                                    $basedn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=com';
-                                    $filter = array("ou", "description");
-                                    $sr = ldap_list($ds, $basedn, "ou=$name", $filter);
-                                    $info = ldap_get_entries($ds, $sr);
-                                    $column = "";
-                                    $column = explode(";", $info[0]["description"][0]);
+                                    $dn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=com';
+                                    $columns = getColumns($ds, $dn, $name);
                                     ?>
-                                   <input type="text" name="<?=0?>" placeholder="<?=$column[0]?>" class="form-control" readonly />
-                                    <?php
-                                    for($i = 1; $i < count($column)-1; $i++){
+                                   <tr>
+                                        <td>
+                                            <strong><?php echo $columns[0]; ?></strong>
+                                        </td>
+                                        <td>
+                                             <input type="text" name="<?=0?>" placeholder="<?=$columns[0]?>" class="form-control" readonly />
+                                        </td>
+                                   </tr>
+                    <?php
+                                    for($i = 1; $i < count($columns)-1; $i++){
                                         ?>
-                                            <input type="text" name="<?=$i?>" placeholder="<?=$column[$i]?>" class="form-control" /> 
-                                        <?php
+                                        <tr>
+                                             <td>
+                                                  <strong><?php echo $columns[$i]; ?></strong>
+                                             </td>
+                                             <td>
+                                                  <input type="text" name="<?=$i?>" placeholder="<?=$columns[$i]?>" class="form-control" />
+                                             </td>
+                                        </tr>
+                    <?php
                                     }
                                     ?>
-                                        <input type="hidden" name="count" class="form-control" value="<?=count($column)-1?>" />
-                                        <input type="hidden" name="name" class="form-control" value="<?=$name?>" />
-                                    <?php
+                    <input type="hidden" name="count" class="form-control" value="<?=count($columns)-1?>" />
+                    <input type="hidden" name="name" class="form-control" value="<?=$name?>" />
+                    <?php
                                 }
+                            } else {
+                                 echo "ERROR 404";
                             }
                          ?>
-                        
-                          <div class="table-responsive">  
-                               <input type="submit" name="submit" id="submit" class="btn btn-info" value="Submit" />  
-                          </div>  
-                     </form>  
-                </div>  
-           </div>  
-      </body>  
- </html>
+                    <tr>
+                         <td> 
+                              <input type="submit" name="submit" id="submit" class="btn btn-info" value="Submit" />
+                         </td>
+                    </tr>
+                </div>
+            </table>
+        </form>
+    </body>
+
+</html>

@@ -22,6 +22,7 @@
             $filter = array("ou", "description");
             $sr = ldap_list($ds, $basedn, "ou=*", $filter);
             $info = ldap_get_entries($ds, $sr);
+           
             //pagination
             $per_page = 4;
             $total_results = $info["count"];
@@ -38,9 +39,18 @@
                     $end = $per_page;
                 }
             } else {
-                // if page isn't set, show first set of results
+                // if page isn't set, show first set of results, or if 'all' is set as 'true' show all results
                 $start = 0;
-                $end = $per_page;
+                if (isset($_GET['all'])) {
+                    $all = $_GET['all'];
+                    if($all){
+                        $end = $info["count"];
+                    } else {
+                        $end = $per_page;
+                    }
+                } else {
+                    $end = $per_page;
+                }
             }
     ?>
 
@@ -54,7 +64,7 @@
         <tr>
             <td><a href="add.php?name=<?= $name ?>">Prideti irasa</a> |
                 <a href="view.php?name=<?php echo $name; ?>">Atnaujinti</a> |
-                <a href="all.php">Atgal</a> | <a href='page.php'>Visas sąrašas</a> | <a href='search.php'>Paieška</a> |
+                <a href="all.php">Atgal</a> | <a href='view.php?name=<?= $name ?>&all=true'>Visas sąrašas</a> | <a href='search.php'>Paieška</a> |
                 <b>Puslapis:</b>
                 <?php 
                     for ($i = 1; $i <= $total_pages; $i++) {
@@ -72,13 +82,8 @@
         <thead>
             <tr>
                 <?php
-                                        //tokiem dalykam reiktu sukurti atskiras funkcijas kad padavus per parametrus gauciau reza
                                         $dn = "OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
-                                        $filterAll = array("ou", "description");
-                                        $getList = ldap_list($ds, $dn, "ou=$name", $filterAll);
-                                        $list = ldap_get_entries($ds, $getList);
-                                        //explodina lievai nes yra prie duomenu galo kabliataskis
-                                        $str_arr = explode(";", $list[0]["description"][0]); 
+                                        $str_arr = getColumns($ds, $dn, $name); 
                                         $count =  count($str_arr)-1;
                                         for($i=0; $i < $count; $i++){
                                     ?>
