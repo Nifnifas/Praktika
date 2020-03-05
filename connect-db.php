@@ -40,7 +40,7 @@
         $filterAll = array("ou", "description");
         $source = ldap_list($ds, $dn, "ou=*", $filterAll);
         $info = ldap_get_entries($ds, $source);
-        if($info["count"] > 0){
+        if($info["count"] >= 0){
             for($i = 0; $i < $info["count"]; $i++){
                 if($info[$i]["ou"][0] > $autoIncValue){
                     $autoIncValue = $info[$i]["ou"][0];
@@ -60,5 +60,18 @@
         //explodina lievai nes yra prie duomenu galo kabliataskis
         $str_arr = explode(";", $list[0]["description"][0]); 
         return $str_arr;
+    }
+
+    function getInputType($ds, $dn, $name){
+        $filterAll = array("ou", "street");
+        $getList = ldap_list($ds, $dn, "ou=$name", $filterAll);
+        $list = ldap_get_entries($ds, $getList);
+        //explodina lievai nes yra prie duomenu galo kabliataskis
+        $str_arr = explode(";", $list[0]["street"][0]); 
+        return $str_arr;
+    }
+
+    function getDateAndTime(){
+        return $date = date("Y/m/d") . " " . date("H:i:s");
     }
 ?>

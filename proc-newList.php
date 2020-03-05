@@ -10,23 +10,30 @@
         {
             // bind with appropriate dn to give update access
             $r = ldap_bind($ds, $username, $psw);
-            if($r){
-                $description = "";
-                for($i=0; $i<$number; $i++)  
-                {  
-                    if(trim($_POST["name"][$i] != ''))  
-                    {
+            if($r) {
+                // default field, auto-generated
+                $description = "ID;";
+                $inputType = "Text;";
+                for($i=0; $i<$number; $i++) {  
+                    if(trim($_POST["name"][$i] != '')) {
                         $description .= htmlspecialchars($_POST["name"][$i]) . ";";
+                    }
+                    if(trim($_POST["formType"][$i] != '')) {
+                        $inputType .= htmlspecialchars($_POST["formType"][$i]) . ";";
                     }  
                 }
+                // default field, auto-generated
+                $description .= "Iraso data;";
+                $inputType .= "Date;";
                 $userid = htmlspecialchars($_POST["ou"]);
                 $registry["ou"] = $userid;
                 $registry["description"] = $description;
+                $registry["street"] = $inputType;
                 $registry["objectClass"] = "organizationalUnit";
                 $result = ldap_add($ds, "ou=$userid,OU=Registrai,OU=TableSet,DC=mycompany,DC=com", $registry);  
-                echo "Data Inserted Successfully";
+                echo "Aplankalas sekmingai sukurtas!";
             }
-            else{
+            else {
                 echo "You do not have rights to add new Registry.";
             }
             ldap_close($ds);

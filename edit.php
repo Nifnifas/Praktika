@@ -13,6 +13,9 @@
 <head>
     <title>REGISTRO <?= $id ?> redagavimas</title>
     <link rel="stylesheet" href="list.css">
+    <link rel="stylesheet" href="jquery-ui.css">
+    <script src="jquery.min.js"></script>
+    <script src="jquery-ui.js"></script>
 </head>
 
 <body bgcolor="#f2f2f2">
@@ -41,6 +44,7 @@
                                     $info = ldap_get_entries($ds, $sr);
                                     $dn = "OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
                                     $columns = getColumns($ds, $dn, $name);
+                                    $inputTypes = getInputType($ds, $dn, $name);
                                     ?>
                                     <tr>
                                         <td>
@@ -51,19 +55,35 @@
                                         </td>
                                     </tr>
                                     <?php
-                                    for($i = 1; $i < $info["count"]; $i++){
-                                        ?>
-                                        <tr>
-                                            <td>
-                                                <strong><?php echo $columns[$i]; ?></strong>
-                                            </td>
-                                            <td>
-                                                <input type="text" name="<?= $i ?>" value="<?=$info[$i]["description"][0]?>" class="form-control" /> 
-                                            </td>
-                                        </tr>
+                                    for($i = 1; $i < $info["count"]-1; $i++){
+                                        switch($inputTypes[$i]){
+                                            case "Date":
+                                                ?>
+                                                <tr>
+                                                    <td>
+                                                        <strong><?php echo $columns[$i]; ?></strong>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" name="<?=$i?>" id="datepicker<?php echo $i;?>" value="<?php echo $info[$i]["description"][0]; ?>" class="datepicker" required/><br/>
+                                                    </td>
+                                                </tr>
+                                            <?php
+                                            break;
+                                            case "Text":
+                                                ?>
+                                                <tr>
+                                                    <td>
+                                                        <strong><?php echo $columns[$i]; ?></strong>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" name="<?= $i ?>" value="<?=$info[$i]["description"][0]?>" class="form-control" /> 
+                                                    </td>
+                                                </tr>
                                         <?php
+                                        }
                                     }
                                     ?>
+                                        <input type="hidden" name="<?=$info["count"]-1?>" class="form-control" value="<?php echo getDateAndTime();?>" />
                                         <input type="hidden" name="count" class="form-control" value="<?=$info["count"]?>" />
                                         <input type="hidden" name="name" class="form-control" value="<?=$name?>" />
                                     <?php
@@ -84,3 +104,12 @@
            
       </body>  
  </html>
+
+ <script>
+  $(function() {
+    $( ".datepicker" ).datepicker({
+		'format': 'yyyy-m-d',
+        'autoclose': true
+	});
+  });
+</script>

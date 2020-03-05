@@ -10,8 +10,11 @@
     ?>
 
 <head>
-    <title>REGISTRO <?= $id ?> redagavimas</title>
+    <title>Naujo iraso kurimas</title>
     <link rel="stylesheet" href="list.css">
+    <link rel="stylesheet" href="jquery-ui.css">
+    <script src="jquery.min.js"></script>
+    <script src="jquery-ui.js"></script>
 </head>
 
 <body bgcolor="#f2f2f2">
@@ -36,27 +39,44 @@
                                 if($result){
                                     $dn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=com';
                                     $columns = getColumns($ds, $dn, $name);
+                                    $inputTypes = getInputType($ds, $dn, $name);
                                     ?>
                                    <tr>
                                         <td>
                                             <strong><?php echo $columns[0]; ?></strong>
                                         </td>
                                         <td>
-                                             <input type="text" name="<?=0?>" placeholder="<?=$columns[0]?>" class="form-control" readonly />
+                                             <input type="text" name="<?=0?>" placeholder="<?=$columns[0]?> (Auto-gen)" class="form-control" readonly />
                                         </td>
                                    </tr>
                     <?php
-                                    for($i = 1; $i < count($columns)-1; $i++){
+                                    for($i = 1; $i < count($columns)-2; $i++){
+                                        switch($inputTypes[$i]){
+                                            case "Date":
+                                            ?>
+                                                <tr>
+                                                    <td>
+                                                        <strong><?php echo $columns[$i]; ?></strong>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" name="<?=$i?>" id="datepicker<?php echo $i;?>" placeholder="<?php echo $columns[$i]; ?>" class="datepicker" required/><br/>
+                                                    </td>
+                                                </tr>
+                                            <?php
+                                            break;
+                                            case "Text":
                                         ?>
-                                        <tr>
-                                             <td>
-                                                  <strong><?php echo $columns[$i]; ?></strong>
-                                             </td>
-                                             <td>
-                                                  <input type="text" name="<?=$i?>" placeholder="<?=$columns[$i]?>" class="form-control" />
-                                             </td>
-                                        </tr>
-                    <?php
+                                            <tr>
+                                                <td>
+                                                    <strong><?php echo $columns[$i]; ?></strong>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="<?=$i?>" placeholder="<?=$columns[$i]?>" class="form-control" required />
+                                                </td>
+                                            </tr>
+                        <?php
+                                            break;
+                                        }
                                     }
                                     ?>
                     <input type="hidden" name="count" class="form-control" value="<?=count($columns)-1?>" />
@@ -78,3 +98,12 @@
     </body>
 
 </html>
+
+<script>
+  $(function() {
+    $( ".datepicker" ).datepicker({
+		'format': 'yyyy-m-d',
+        'autoclose': true
+	});
+  });
+</script>

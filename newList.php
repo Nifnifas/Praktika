@@ -25,7 +25,8 @@
                         <input type="text" name="ou" placeholder="Aplanko pavadinimas" class="form-control" />  
                           <div class="table-responsive">  
                                <table class="table table-bordered" id="dynamic_field">  
-                                    <tr>  
+                                    <tr>
+                                         <?php getDropdown() ?>
                                          <td><input type="text" name="name[]" placeholder="Stulpelis" class="form-control name_list" /></td>  
                                          <td><button type="button" name="add" id="add" class="btn btn-success">+</button></td>  
                                     </tr>  
@@ -41,8 +42,8 @@
  $(document).ready(function(){  
       var i=1;  
       $('#add').click(function(){  
-           i++;  
-           $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" name="name[]" placeholder="Stulpelis" class="form-control name_list" /></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></td></tr>');  
+           i++;
+           $('#dynamic_field').append('<tr id="row'+i+'"><td><select name="formType[]"><option disabled value="">Lauko tipas...</option><option selected value="Text">Tekstinis</option><option value="Date">Data</option></select></td><td><input type="text" name="name[]" placeholder="Stulpelis" class="form-control name_list" /></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></td></tr>');  
       });  
       $(document).on('click', '.btn_remove', function(){  
            var button_id = $(this).attr("id");   
@@ -62,3 +63,15 @@
       });  
  });  
  </script>
+
+<?php
+     function getDropdown(){
+          ?><td>
+                                             <select name="formType[]">
+                                                  <option disabled value="">Lauko tipas...</option>
+                                                  <option selected value="Text">Tekstinis</option>
+                                                  <option value="Date">Data</option>
+                                             </select>
+                                         </td><?php
+     }
+?>

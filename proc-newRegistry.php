@@ -6,11 +6,12 @@
     if ($result) {
         $columnCount = $_POST["count"];
         $postResults = array();
-        for ($i = 0; $i < $columnCount; $i++){
+        for ($i = 0; $i < $columnCount-1; $i++){
             $postResults[$i] = $_POST["$i"];
         }
         $name = $_POST["name"];
         $postResults[0] = autoIncrement($ds, "OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com");
+        $postResults[$columnCount-1] = getDateAndTime();
         $registry["ou"] = $postResults[0];
         $registry["description"] = count($postResults);
         $registry["objectClass"] = "organizationalUnit";
