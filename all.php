@@ -10,6 +10,20 @@
                 <br />  
                 <br />  
                 <h2 align="center">Registru aplankalu sarasas</h2>
+                <?php
+                    include('config.php');
+                    include('connect-db.php');
+                    session_start();
+                    if($_SESSION["msg"] != "") {
+                ?>
+                        <div>
+                            <span onclick="this.parentElement.style.display='none';">&times;</span>
+                                    <?= $_SESSION["msg"] ?>
+                        </div>
+                <?php
+                    clearSession();
+                    }
+                ?>
                 <a href="newList.php">Prideti aplankala</a> | 
                 <a href="all.php">Atnaujinti</a>
                 <div class="form-group">  
@@ -24,10 +38,8 @@
                         </thead>
                         <tbody>
                             <?php
-                                include('config.php');
-                                include('connect-db.php');
                                 $ds = connectToAD($server);
-                                $result = bindAD($ds);
+                                $result = bindAD($ds, $userdn, $userpw);
                                
                                 if($result){
                                     $filter = array("ou", "description");

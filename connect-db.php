@@ -1,16 +1,18 @@
 <?php
+    function clearSession(){
+        $_SESSION["msg"]="";
+    }
+
     function connectToAD($server){
         $conn = ldap_connect($server) or die ("Could not connect to LDAP server");
         return $conn;
     }
 
-    function bindAD($conn){
+    function bindAD($conn, $userdn, $userpw){
         if($conn){
             ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
             ldap_set_option($conn, LDAP_OPT_REFERRALS, 0);
-            $userCreds = 'CN=Administrator,CN=Users,DC=mycompany,DC=com';
-            $psw = 'Admin123';
-            $result = ldap_bind($conn, $userCreds, $psw);
+            $result = ldap_bind($conn, $userdn, $userpw);
             return $result;
         }
         return $conn;

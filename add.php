@@ -7,7 +7,7 @@
             include('config.php');
             include('connect-db.php');
             $ds = connectToAD($server);
-            $result = bindAD($ds);
+            $result = bindAD($ds, $userdn, $userpw);
     ?>
 
 <head>

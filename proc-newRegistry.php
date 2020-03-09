@@ -1,8 +1,9 @@
 <?php
     include('config.php');
     include('connect-db.php');
+    session_start();
     $ds = connectToAD($server);
-    $result = bindAD($ds);
+    $result = bindAD($ds, $userdn, $userpw);
 
     if ($result) {
         $columnCount = $_POST["count"];
@@ -30,9 +31,11 @@
             $registry["objectClass"] = "organizationalUnit";
             ldap_add($ds, "OU=$title,OU=$postResults[0],OU=$name," . $basedn, $registry);
         }
-        echo "Success";
+        $_SESSION["msg"] = "Irasas pridetas sekmingai!";
+        header("Location: view.php?name=$name");
     } else {
-        echo "You do not have rights to add new Registry.";
+        $_SESSION["msg"] = "Klaida! Jus neturite tam teisiu.";
+        header("Location: add.php?name=$name");
     }
     ldap_close($ds);
 ?>

@@ -1,13 +1,14 @@
 <?php
     include('config.php');
     include('connect-db.php');
+    session_start();
     $ds = connectToAD($server);
     if ($ds) {
         $number = count($_POST["name"]);  
         if($number > 0)  
         {
             // bind with appropriate dn to give update access
-            $result = bindAD($ds);
+            $result = bindAD($ds, $userdn, $userpw);
             if($result) {
                 // default field, auto-generated
                 $description = "ID;";
@@ -29,12 +30,15 @@
                 $registry["street"] = $inputType;
                 $registry["objectClass"] = "organizationalUnit";
                 $result = ldap_add($ds, "ou=$userid," . $basedn, $registry);  
+                $_SESSION["msg"] = "Aplankalas sekmingai sukurtas!";
                 echo "Aplankalas sekmingai sukurtas!";
             }
             else {
-                echo "You do not have rights to add new Registry.";
+                $_SESSION["msg"] = "Jus neturite tam teisiu.";
+                echo "Jus neturite tam teisiu!";
             }
             ldap_close($ds);
+            //header("Location: all.php");
         } else {  
             echo "Please Fill in fields";  
         }  

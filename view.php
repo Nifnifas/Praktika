@@ -6,8 +6,9 @@
         $name = $_GET['name'];
         include('config.php');
         include('connect-db.php');
+        session_start();
         $ds = connectToAD($server);
-        $result = bindAD($ds);
+        $result = bindAD($ds, $userdn, $userpw);
         ?>
 
 <head>
@@ -23,7 +24,6 @@
             $filter = array("ou", "description");
             $sr = ldap_list($ds, $dn, "ou=*", $filter);
             $info = ldap_get_entries($ds, $sr);
-           
             //pagination
             $per_page = 4;
             $total_results = $info["count"];
@@ -62,6 +62,19 @@
             <th></th>
             </th>
         </tr>
+        <?php 
+            if($_SESSION["msg"] != ""){
+                ?>
+                <tr>
+                    <th>
+                        <span onclick="this.parentElement.style.display='none';">&times;</span>
+                        <?= $_SESSION["msg"] ?>
+                    </th>
+                </tr>
+                <?php
+                clearSession();
+            }
+        ?>
         <tr>
             <td><a href="add.php?name=<?= $name ?>">Prideti irasa</a> |
                 <a href="view.php?name=<?php echo $name; ?>">Atnaujinti</a> |
