@@ -5,8 +5,9 @@
         if (isset($_GET['id']) && isset($_GET['name'])) {
             $id = $_GET['id'];
             $name = $_GET['name'];
+            include('config.php');
             include('connect-db.php');
-            $ds = connectToAD();
+            $ds = connectToAD($server);
             $result = bindAD($ds);
     ?>
 
@@ -38,13 +39,12 @@
                             <div>
                          <?php 
                                 if($result){
-                                    $basedn = "OU=$id,OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
+                                    $dn = "OU=$id,OU=$name," . $basedn;
                                     $filter = array("ou", "description");
-                                    $sr = ldap_list($ds, $basedn, "ou=*", $filter);
+                                    $sr = ldap_list($ds, $dn, "ou=*", $filter);
                                     $info = ldap_get_entries($ds, $sr);
-                                    $dn = "OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
-                                    $columns = getColumns($ds, $dn, $name);
-                                    $inputTypes = getInputType($ds, $dn, $name);
+                                    $columns = getColumns($ds, $basedn, $name);
+                                    $inputTypes = getInputType($ds, $basedn, $name);
                                     ?>
                                     <tr>
                                         <td>

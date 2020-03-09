@@ -1,6 +1,7 @@
 <?php
+    include('config.php');
     include('connect-db.php');
-    $ds = connectToAD();
+    $ds = connectToAD($server);
     $result = bindAD($ds);
 
     if ($result) {
@@ -10,14 +11,13 @@
             $postResults[$i] = $_POST["$i"];
         }
         $name = $_POST["name"];
-        $postResults[0] = autoIncrement($ds, "OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com");
+        $postResults[0] = autoIncrement($ds, "OU=$name," . $basedn);
         $postResults[$columnCount-1] = getDateAndTime();
         $registry["ou"] = $postResults[0];
         $registry["description"] = count($postResults);
         $registry["objectClass"] = "organizationalUnit";
-        ldap_add($ds, "OU=$postResults[0],OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com", $registry);
+        ldap_add($ds, "OU=$postResults[0],OU=$name," . $basedn, $registry);
 
-        $basedn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=com';
         $filter = array("ou", "description");
         $sr = ldap_list($ds, $basedn, "ou=$name", $filter);
         $info = ldap_get_entries($ds, $sr);
@@ -28,7 +28,7 @@
             $registry["ou"] = $title;
             $registry["description"] = $postResults[$i];
             $registry["objectClass"] = "organizationalUnit";
-            ldap_add($ds, "OU=$title,OU=$postResults[0],OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com", $registry);
+            ldap_add($ds, "OU=$title,OU=$postResults[0],OU=$name," . $basedn, $registry);
         }
         echo "Success";
     } else {

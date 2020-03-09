@@ -4,8 +4,9 @@
 <?php
         if (isset($_GET['name'])) {
             $name = $_GET['name'];
+            include('config.php');
             include('connect-db.php');
-            $ds = connectToAD();
+            $ds = connectToAD($server);
             $result = bindAD($ds);
     ?>
 
@@ -37,9 +38,8 @@
                 <div>
                     <?php 
                                 if($result){
-                                    $dn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=com';
-                                    $columns = getColumns($ds, $dn, $name);
-                                    $inputTypes = getInputType($ds, $dn, $name);
+                                    $columns = getColumns($ds, $basedn, $name);
+                                    $inputTypes = getInputType($ds, $basedn, $name);
                                     ?>
                                    <tr>
                                         <td>

@@ -1,6 +1,6 @@
 <?php
-    function connectToAD(){
-        $conn = ldap_connect("WIN-7HITSPV9HGH.mycompany.com") or die ("Could not connect to LDAP server");
+    function connectToAD($server){
+        $conn = ldap_connect($server) or die ("Could not connect to LDAP server");
         return $conn;
     }
 

@@ -4,8 +4,9 @@
 <?php
     if (isset($_GET['name'])) {
         $name = $_GET['name'];
+        include('config.php');
         include('connect-db.php');
-        $ds = connectToAD();
+        $ds = connectToAD($server);
         $result = bindAD($ds);
         ?>
 
@@ -18,9 +19,9 @@
     <?php
 
         if ($result) {
-            $basedn = "OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
+            $dn = "OU=$name," . $basedn;
             $filter = array("ou", "description");
-            $sr = ldap_list($ds, $basedn, "ou=*", $filter);
+            $sr = ldap_list($ds, $dn, "ou=*", $filter);
             $info = ldap_get_entries($ds, $sr);
            
             //pagination
@@ -82,8 +83,7 @@
         <thead>
             <tr>
                 <?php
-                                        $dn = "OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
-                                        $str_arr = getColumns($ds, $dn, $name); 
+                                        $str_arr = getColumns($ds, $basedn, $name); 
                                         $count =  count($str_arr)-1;
                                         for($i=0; $i < $count; $i++){
                                     ?>
@@ -101,9 +101,9 @@
                                     for ($i = $start; $i < $end; $i++) {
                                         if ($i == $total_results) { break; }
                                         $id = $info[$i]["ou"][0];
-                                        $basedn2 = "OU=$id,OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
+                                        $dn = "OU=$id,OU=$name," . $basedn;
                                         $filter2 = array("ou", "description");
-                                        $sr2 = ldap_list($ds, $basedn2, "ou=*", $filter2);
+                                        $sr2 = ldap_list($ds, $dn, "ou=*", $filter2);
                                         $info2 = ldap_get_entries($ds, $sr2);
                                     ?>
             <tr>

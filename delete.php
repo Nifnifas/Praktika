@@ -3,11 +3,12 @@
 	if (isset($_GET['id']) && is_numeric($_GET['id'])){
 		$id = $_GET['id'];
 		$name = $_GET['name']; // ifas turi buti ir su situo
+		include('config.php');
 		include('connect-db.php');
-		$ds = connectToAD();
+		$ds = connectToAD($server);
 		$result = bindAD($ds);
 		if($result){
-			$basedn = "OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
+			$basedn = "OU=$name," . $basedn;
             $filter = array("ou", "description");
 			$sr = ldap_list($ds, $basedn, "ou=$id", $filter);
 			$info = ldap_get_entries($ds, $sr);
@@ -21,11 +22,11 @@
 		}
 	} else if(isset($_GET['id']) && !is_numeric($_GET['id'])) {
 		$name = $_GET['id'];
+		include('config.php');
 		include('connect-db.php');
-		$ds = connectToAD();
+		$ds = connectToAD($server);
 		$result = bindAD($ds);
 		if($result){
-			$basedn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=com';
             $filter = array("ou", "description");
 			$sr = ldap_list($ds, $basedn, "ou=$name", $filter);
 			$info = ldap_get_entries($ds, $sr);

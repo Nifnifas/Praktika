@@ -24,12 +24,12 @@
                         </thead>
                         <tbody>
                             <?php
+                                include('config.php');
                                 include('connect-db.php');
-                                $ds = connectToAD();
+                                $ds = connectToAD($server);
                                 $result = bindAD($ds);
                                
                                 if($result){
-                                    $basedn = 'OU=Registrai,OU=TableSet,DC=mycompany,DC=com';
                                     $filter = array("ou", "description");
                                     $sr = ldap_list($ds, $basedn, "ou=*", $filter);
                                     $info = ldap_get_entries($ds, $sr);

@@ -1,7 +1,8 @@
 <?php
 //reikia pirma patikrint ar kazkas postinama is viso.
+    include('config.php');
     include('connect-db.php');
-    $ds = connectToAD();
+    $ds = connectToAD($server);
     $result = bindAD($ds);
 
     if ($result) {
@@ -12,9 +13,9 @@
             $postResults[$i] = $_POST["$i"];
         }
 
-        $basedn = "OU=$postResults[0],OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com";
+        $dn = "OU=$postResults[0],OU=$name," . $basedn;
         $filter = array("ou", "description");
-        $sr = ldap_list($ds, $basedn, "ou=*", $filter);
+        $sr = ldap_list($ds, $dn, "ou=*", $filter);
         $info = ldap_get_entries($ds, $sr);
 
         for($i = 0; $i < $columnCount; $i++){
@@ -22,7 +23,7 @@
             //$registry["ou"] = $title;
             $registry["description"] = $_POST[$i];
             //$registry["objectClass"] = "organizationalUnit";
-            ldap_mod_replace($ds, "OU=$title,OU=$postResults[0],OU=$name,OU=Registrai,OU=TableSet,DC=mycompany,DC=com", $registry);
+            ldap_mod_replace($ds, "OU=$title,OU=$postResults[0],OU=$name," . $basedn, $registry);
         }
         echo "Success";
     } else {
