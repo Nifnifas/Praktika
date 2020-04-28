@@ -11,7 +11,7 @@
     ?>
 
 <head>
-    <title>Naujo iraso kurimas</title>
+    <title>Naujo įrašo kūrimas</title>
     <link rel="stylesheet" href="list.css">
     <link rel="stylesheet" href="jquery-ui.css">
     <script src="jquery.min.js"></script>
@@ -92,7 +92,7 @@
                          ?>
                 <tr>
                     <td>
-                        <input type="submit" name="submit" id="submit" class="btn btn-info" value="Submit" />
+                        <input type="submit" name="submit" id="submit" class="btn btn-info" value="Įrašyti" />
                     </td>
                 </tr>
             </div>

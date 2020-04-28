@@ -12,7 +12,7 @@
     ?>
 
 <head>
-    <title>REGISTRO <?= $id ?> perziura</title>
+    <title>REGISTRO <?= $id ?> peržiūra</title>
     <link rel="stylesheet" href="list.css">
     <link rel="stylesheet" href="jquery-ui.css">
     <script src="jquery.min.js"></script>

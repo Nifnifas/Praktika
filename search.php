@@ -29,7 +29,9 @@ echo 'method="post">';
 echo '<tr><th><span style="float:center;">Jūs dirbate su registru ';
 echo $name;
 echo '</span></th></td>';
-echo "<tr><td><a href='all.php'>Pagrindinis puslapis</a></td></tr>";
+echo '<tr><td><a href="all.php">Pagrindinis puslapis</a> | <a href="view.php?name=';
+echo $name;
+echo '">Atgal</a></td></tr>';
 echo "</table>";
 ?>
         <table id="irasas">

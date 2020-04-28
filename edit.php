@@ -96,7 +96,7 @@
                          ?>
                 <tr>
                     <td>
-                        <input type="submit" name="submit" id="submit" class="btn btn-info" value="Issaugoti" />
+                        <input type="submit" name="submit" id="submit" class="btn btn-info" value="Išsaugoti" />
                     </td>
                 </tr>
             </div>

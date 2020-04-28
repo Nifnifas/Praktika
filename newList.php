@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Registru aplanko kurimas</title>
+    <title>Registrų aplanko kūrimas</title>
     <link rel="stylesheet" href="list.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 </head>
