@@ -42,8 +42,11 @@
             } else {
                 // if page isn't set, show first set of results, or if 'all' is set as 'true' show all results
                 $start = 0;
-                if (isset($_GET['all'])) {
-                    $all = $_GET['all'];
+                if (isset($_GET['all']) || $_POST) {
+                    if(isset($_GET["all"]))
+                        $all = $_GET['all'];
+                    if($_POST)
+                        $all = true;
                     if($all){
                         $end = $info["count"];
                     } else {
@@ -56,35 +59,57 @@
     ?>
 
     <table id="header1">
+
+        <?php
+        if(!$_POST) { ?>
         <tr>
-            <th><span style="float:center;">Jūs dirbate su registru <?= $name ?></span>
+            <th>
+                <span style="float:center;">Jūs dirbate su registru <?= $name ?></span>
             <th></th>
             <th></th>
             </th>
         </tr>
+        <?php } else { ?>
+        <tr>
+            <th>
+                <span style="float:center;">Jūs dirbate su registru <?= $name ?></span>
+            <th></th>
+            <th></th>
+            </th>
+            <th>
+                <span style="float:center;">Paieškos "<?= $_POST["Metai"] ?>" rezultatai</span>
+            <th></th>
+            <th></th>
+            </th>
+        </tr>
+        <?php
+        }
+        ?>
+
         <?php 
             if($_SESSION["msg"] != ""){
                 ?>
-                <tr>
-                    <th>
-                        <span onclick="this.parentElement.style.display='none';">&times;</span>
-                        <?= $_SESSION["msg"] ?>
-                    </th>
-                </tr>
-                <?php
+        <tr>
+            <th>
+                <span onclick="this.parentElement.style.display='none';">&times;</span>
+                <?= $_SESSION["msg"] ?>
+            </th>
+        </tr>
+        <?php
                 clearSession();
             }
         ?>
         <tr>
-            <td><a href="add.php?name=<?= $name ?>">Prideti irasa</a> |
+            <td><a href="add.php?name=<?= $name ?>">Pridėti įrašą</a> |
                 <a href="view.php?name=<?php echo $name; ?>">Atnaujinti</a> |
-                <a href="all.php">Atgal</a> | <a href='view.php?name=<?= $name ?>&all=true'>Visas sąrašas</a> | <a href='search.php'>Paieška</a> |
+                <a href="all.php">Atgal</a> | <a href='view.php?name=<?= $name ?>&all=true'>Visas sąrašas</a> | <a
+                    href='search.php?name=<?= $name ?>'>Paieška</a> |
                 <b>Puslapis:</b>
                 <?php 
                     for ($i = 1; $i <= $total_pages; $i++) {
                     ?>
-                        <a href="view.php?name=<?= $name ?>&page=<?= $i ?>"><?php echo $i; ?></a>
-                    <?php
+                <a href="view.php?name=<?= $name ?>&page=<?= $i ?>"><?php echo $i; ?></a>
+                <?php
                     }
                 ?>
             </td>
@@ -96,11 +121,12 @@
         <thead>
             <tr>
                 <?php
+                                        $dateColumnId = 0;
                                         $str_arr = getColumns($ds, $basedn, $name); 
                                         $count =  count($str_arr)-1;
                                         for($i=0; $i < $count; $i++){
                                     ?>
-                <th scope="col"><?php echo $str_arr[$i]; ?></th>
+                <th scope="col"><?php echo $str_arr[$i]; if($str_arr[$i] == "Iraso data"){$dateColumnId = $i;} ?></th>
                 <?php
                                         }
                                     ?>
@@ -121,26 +147,71 @@
                                     ?>
             <tr>
                 <?php
-                                            for ($j = 0; $j < $info2["count"]; $j++) {
+                                                $countSearchResults = 0;
+                                                    for ($j = 0; $j < $info2["count"]; $j++) {
+                                                        if($_POST) {
+                                                        $out = explode('/', $info2[$dateColumnId]["description"][0]);
+                                                        $year = $out[0];
+                                                        $month   = $out[1];
+                                                        $day  = $out[2];
+                                                        if($year == $_POST["Metai"]) {
                                             ?>
-                <td><?php /*echo array_search("pirmas", $info2[2]["ou"], false) */ echo $info2[$j]["description"][0]?>
+                <td><?php /*echo array_search("pirmas", $info2[2]["ou"], false) */
+                $out = strlen($info2[$j]["description"][0]) > 50 ? substr($info2[$j]["description"][0],0,50)."..." : $info2[$j]["description"][0];
+                echo $out;
+                $countSearchResults++;
+                ?>
+                </td>
+                <?php }
+                                                        } else {
+                                                            ?>
+                <td><?php /*echo array_search("pirmas", $info2[2]["ou"], false) */
+                $out = strlen($info2[$j]["description"][0]) > 50 ? substr($info2[$j]["description"][0],0,50)."..." : $info2[$j]["description"][0];
+                echo $out;
+                ?>
                 </td>
                 <?php
-                                            }
-                                            ?>
-                <td><a href="edit.php?name=<?= $name ?>&id=<?= $info[$i]["ou"][0] ?>"><img border="0" alt="edit"
+                                                        }
+                                                }
+                                                
+                                                
+                                                if($_POST && $year == $_POST["Metai"]) { ?>
+                <td><a href="viewItem.php?name=<?= $name ?>&id=<?= $info[$i]["ou"][0] ?>"><img border="0" alt="view"
+                            src="images/look.png" width="20" height="20"></a> | <a
+                        href="edit.php?name=<?= $name ?>&id=<?= $info[$i]["ou"][0] ?>"><img border="0" alt="edit"
                             src="images/edit-document.jpg" width="20" height="20"></a> | <a
                         href="delete.php?name=<?= $name ?>&id=<?= $info[$i]["ou"][0] ?>"><img border="0" alt="delete"
-                            src="images/delete-button.jpg" width="20" height="20"></a></td>
+                            src="images/delete-button.jpg" width="20" height="20"></a>
+                </td>
             </tr>
             <?php
-                                    }
-                                }
+                                                } else if(!$_POST) {
+                                                    ?>
+            <td><a href="viewItem.php?name=<?= $name ?>&id=<?= $info[$i]["ou"][0] ?>"><img border="0" alt="view"
+                        src="images/look.png" width="20" height="20"></a> | <a
+                    href="edit.php?name=<?= $name ?>&id=<?= $info[$i]["ou"][0] ?>"><img border="0" alt="edit"
+                        src="images/edit-document.jpg" width="20" height="20"></a> | <a
+                    href="delete.php?name=<?= $name ?>&id=<?= $info[$i]["ou"][0] ?>"><img border="0" alt="delete"
+                        src="images/delete-button.jpg" width="20" height="20"></a>
+            </td>
+            </tr>
+            <?php
+                                                } else if($_POST && $countSearchResults == 0){
+                                                    ?>
+            <tr>
+                <td align="center" colspan="<?php echo $count+1; ?>">Registrų pagal norimą kriterijų nerasta!</td>
+            </tr>
+            <?php die();
+                                                }
+                                                
+                                            }
+                                        }
+                                
                                 
                             else {
                                 ?>
             <tr>
-                <td align="center" colspan="<?php echo $count+1; ?>">Registru nera!</td>
+                <td align="center" colspan="<?php echo $count+1; ?>">Registrų nėra!</td>
             </tr>
             <?php
                             }
@@ -149,7 +220,7 @@
     </table>
     <?php
                         } else {
-                            echo "You do not have rights to view Registries.";
+                            echo "Neturite teisių peržiūrėti įrašus.";
                         }
                         ldap_close($ds);
                     }

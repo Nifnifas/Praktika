@@ -31,10 +31,10 @@
             $registry["objectClass"] = "organizationalUnit";
             ldap_add($ds, "OU=$title,OU=$postResults[0],OU=$name," . $basedn, $registry);
         }
-        $_SESSION["msg"] = "Irasas pridetas sekmingai!";
+        $_SESSION["msg"] = "Įrasas pridėtas sėkmingai!";
         header("Location: view.php?name=$name");
     } else {
-        $_SESSION["msg"] = "Klaida! Jus neturite tam teisiu.";
+        $_SESSION["msg"] = "Klaida! Jūs neturite tam teisių.";
         header("Location: add.php?name=$name");
     }
     ldap_close($ds);

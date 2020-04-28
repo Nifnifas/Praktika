@@ -1,8 +1,7 @@
 <?php
-	//kolkas nera apsaugos, errorai resfreshinant page, nera redirect
 	if (isset($_GET['id']) && is_numeric($_GET['id'])){
 		$id = $_GET['id'];
-		$name = $_GET['name']; // ifas turi buti ir su situo
+		$name = $_GET['name'];
 		include('config.php');
 		include('connect-db.php');
 		session_start();
@@ -16,10 +15,10 @@
 			$entrydn = 'OU=' . $info[0]["ou"][0] . ',' . $basedn;
 			$delete = recursive_ldap_delete($ds, $entrydn, true);
 			if($delete){
-				$_SESSION["msg"] = "Irasas istrintas sekmingai!";
+				$_SESSION["msg"] = "Įrašas ištrintas sėkmingai!";
 				header("Location: view.php?name=$name");
 			} else {
-				$_SESSION["msg"] = "Klaida! Jus neturite tam teisiu.";
+				$_SESSION["msg"] = "Klaida! Jūs neturite tam teisių.";
 				header("Location: add.php?name=$name");
 			}
 		}
@@ -37,15 +36,15 @@
 			$entrydn = 'OU=' . $info[0]["ou"][0] . ',' . $basedn;
 			$delete = recursive_ldap_delete($ds, $entrydn, true);
 			if($delete){
-				$_SESSION["msg"] = "Aplankalas istrintas sekmingai!";
+				$_SESSION["msg"] = "Aplankalas ištrintas sėkmingai!";
 				header("Location: all.php");
 			} else {
-				$_SESSION["msg"] = "Klaida! Jus neturite tam teisiu.";
+				$_SESSION["msg"] = "Klaida! Jūs neturite tam teisių.";
 				header("Location: all.php");
 			}
 		}
 	} 
 	else {
-		echo "ERROR";
+		echo "ERROR 404";
 	}		
 ?>

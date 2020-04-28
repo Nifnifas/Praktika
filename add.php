@@ -22,7 +22,7 @@
 
     <table id="header1">
         <tr>
-            <th><span style="float:center;">Jūs kuriate registro <?= $name ?> nauja irasa</span>
+            <th><span style="float:center;">Jūs kuriate registro '<?= $name ?>' naują įrašą</span>
             <th></th>
             <th></th>
             </th>
@@ -33,77 +33,80 @@
             </td>
         </tr>
     </table>
-        <form action="proc-newRegistry.php" method="post">
-            <table id="irasas">
-                <div>
-                    <?php 
+    <form action="proc-newRegistry.php" method="post">
+        <table id="irasas">
+            <div>
+                <?php 
                                 if($result){
                                     $columns = getColumns($ds, $basedn, $name);
                                     $inputTypes = getInputType($ds, $basedn, $name);
                                     ?>
-                                   <tr>
-                                        <td>
-                                            <strong><?php echo $columns[0]; ?></strong>
-                                        </td>
-                                        <td>
-                                             <input type="text" name="<?=0?>" placeholder="<?=$columns[0]?> (Auto-gen)" class="form-control" readonly />
-                                        </td>
-                                   </tr>
-                    <?php
+                <tr>
+                    <td>
+                        <strong><?php echo $columns[0]; ?></strong>
+                    </td>
+                    <td>
+                        <input type="text" name="<?=0?>" placeholder="<?=$columns[0]?> (Automatinis laukas)" class="form-control"
+                            readonly />
+                    </td>
+                </tr>
+                <?php
                                     for($i = 1; $i < count($columns)-2; $i++){
                                         switch($inputTypes[$i]){
                                             case "Date":
                                             ?>
-                                                <tr>
-                                                    <td>
-                                                        <strong><?php echo $columns[$i]; ?></strong>
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" name="<?=$i?>" id="datepicker<?php echo $i;?>" placeholder="<?php echo $columns[$i]; ?>" class="datepicker" required/><br/>
-                                                    </td>
-                                                </tr>
-                                            <?php
+                <tr>
+                    <td>
+                        <strong><?php echo $columns[$i]; ?></strong>
+                    </td>
+                    <td>
+                        <input type="text" name="<?=$i?>" id="datepicker<?php echo $i;?>"
+                            placeholder="<?php echo $columns[$i]; ?>" class="datepicker" required /><br />
+                    </td>
+                </tr>
+                <?php
                                             break;
                                             case "Text":
                                         ?>
-                                            <tr>
-                                                <td>
-                                                    <strong><?php echo $columns[$i]; ?></strong>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="<?=$i?>" placeholder="<?=$columns[$i]?>" class="form-control" required />
-                                                </td>
-                                            </tr>
-                        <?php
+                <tr>
+                    <td>
+                        <strong><?php echo $columns[$i]; ?></strong>
+                    </td>
+                    <td>
+                        <textarea name="<?=$i?>" placeholder="<?=$columns[$i]?>" class="form-control"
+                            required></textarea>
+                    </td>
+                </tr>
+                <?php
                                             break;
                                         }
                                     }
                                     ?>
-                    <input type="hidden" name="count" class="form-control" value="<?=count($columns)-1?>" />
-                    <input type="hidden" name="name" class="form-control" value="<?=$name?>" />
-                    <?php
+                <input type="hidden" name="count" class="form-control" value="<?=count($columns)-1?>" />
+                <input type="hidden" name="name" class="form-control" value="<?=$name?>" />
+                <?php
                                 }
                             } else {
                                  echo "ERROR 404";
                             }
                          ?>
-                    <tr>
-                         <td> 
-                              <input type="submit" name="submit" id="submit" class="btn btn-info" value="Submit" />
-                         </td>
-                    </tr>
-                </div>
-            </table>
-        </form>
-    </body>
+                <tr>
+                    <td>
+                        <input type="submit" name="submit" id="submit" class="btn btn-info" value="Submit" />
+                    </td>
+                </tr>
+            </div>
+        </table>
+    </form>
+</body>
 
 </html>
 
 <script>
-  $(function() {
-    $( ".datepicker" ).datepicker({
-		'format': 'yyyy-m-d',
+$(function() {
+    $(".datepicker").datepicker({
+        'format': 'yyyy-m-d',
         'autoclose': true
-	});
-  });
+    });
+});
 </script>

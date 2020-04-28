@@ -4,7 +4,7 @@
     }
 
     function connectToAD($server){
-        $conn = ldap_connect($server) or die ("Could not connect to LDAP server");
+        $conn = ldap_connect($server) or die ("Neįmanoma prisijungti prie LDAP serverio");
         return $conn;
     }
 
@@ -59,7 +59,7 @@
         $filterAll = array("ou", "description");
         $getList = ldap_list($ds, $dn, "ou=$name", $filterAll);
         $list = ldap_get_entries($ds, $getList);
-        //explodina lievai nes yra prie duomenu galo kabliataskis
+        //data string must end with ';'
         $str_arr = explode(";", $list[0]["description"][0]); 
         return $str_arr;
     }
@@ -68,7 +68,7 @@
         $filterAll = array("ou", "street");
         $getList = ldap_list($ds, $dn, "ou=$name", $filterAll);
         $list = ldap_get_entries($ds, $getList);
-        //explodina lievai nes yra prie duomenu galo kabliataskis
+        //data string must end with ';'
         $str_arr = explode(";", $list[0]["street"][0]); 
         return $str_arr;
     }
